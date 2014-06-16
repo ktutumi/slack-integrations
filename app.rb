@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'multi_json'
 require 'slack'
+require 'uri'
 
 #ENV['SLACK_API_TOKEN'] = 'xoxp-2381348639-2381348641-2387116848-200f20'
 
@@ -18,7 +19,7 @@ end
 post '/bitbucket/post/:channel' do |channel|
   puts '~~~~~ POST /'
 
-  params = ::MultiJson.load(request.body.read)
+  params = ::MultiJson.load(URI.unescape(request.body.read))
   body = params['payload']
 
   repository = "#{body['repository']['owner']}/#{body['repository']['name']}"
