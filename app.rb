@@ -15,17 +15,12 @@ get '/' do
   response
 end
 
+# BitBucket の コミットを通知する
 post '/bitbucket/post/:channel' do |channel|
-  puts '~~~~~ POST /'
-  puts '~~~~~ params[payload]'
-  puts params['payload']
-  puts '~~~~~~~~~~~~~~~~~~~'
-
   body = ::MultiJson.load(params['payload'])
 
   repository = "#{body['repository']['owner']}/#{body['repository']['name']}"
 
-  name = body['repository']['name']
   url = body['canon_url'] + body['repository']['absolute_url']
 
   text = "<%s|%s> pushed to <%s|%s>  \n" % [
