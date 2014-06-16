@@ -15,6 +15,11 @@ get '/' do
   response
 end
 
+post '/' do
+  puts '~~~~~ POST /'
+  puts ::MultiJson::dump(params)
+end
+
 #Slack.chat_postMessage ({
 #  token: ENV['SLACK_API_TOKEN'],
 #  channel: '#gfc',
