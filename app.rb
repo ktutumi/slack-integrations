@@ -15,32 +15,44 @@ get '/' do
   response
 end
 
-post '/bitbucket/post' do
+post '/bitbucket/post/:channel' do |channel|
   puts '~~~~~ POST /'
-  body = params[:payload]
-  repository = "#{body[:owner]}/#{body[:name]}"
-  url = body[:canon_url] + body[:absolute_url]
 
-  str = '<%s|%s> pushed to <%s|%s>' % [
-      "#{body[:canon_url]}/#{body[:user]}",
-      body[:user],
-      repository,
-      url
+  params = ::MultiJson.load(request.body.read)
+  body = params['payload']
+
+  repository = "#{body['repository']['owner']}/#{body['repository']['name']}"
+
+  name = body['repository']['name']
+  url = body['canon_url'] + body['repository']['absolute_url']
+
+  text = '<%s|%s> pushed to <%s|%s>  ' % [
+      "#{body['canon_url']}/#{body['user']}",
+      body['user'],
+      url,
+      repository
   ]
 
-#  body[:commits].each do |commit|
-#    author = commit[:author]
-#    node = commit[:node]
-#    message = commit[:message]
-#  end
+
+  template = '[%s/%s] <%s/commits/%s|%s>: %s'
+  text << "  \n"
+  text << body['commits'].map { |commit|
+    node = commit['node']
+    message = commit['message']
+    branch = commit['branch']
+
+    template % [name, branch, url, node, node, message]
+  }.join("  \n")
 
   Slack.chat_postMessage ({
     token: ENV['SLACK_API_TOKEN'],
-    channel: "##{body[:name]}",
-    text: str,
-    username: 'BitBucket',
+    channel: "##{channel}",
+    text: text,
+    username: 'bitbucket',
     icon_url: 'https://slack.global.ssl.fastly.net/20653/img/services/bitbucket_48.png'
   })
+
+  return 'ok'
 end
 
 
