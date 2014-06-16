@@ -36,7 +36,7 @@ post '/bitbucket/post' do
 
   Slack.chat_postMessage ({
     token: ENV['SLACK_API_TOKEN'],
-    channel: '#gfc',
+    channel: "##{body[:name]}",
     text: str,
     username: 'BitBucket',
     icon_url: 'https://slack.global.ssl.fastly.net/20653/img/services/bitbucket_48.png'
