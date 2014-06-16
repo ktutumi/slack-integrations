@@ -2,6 +2,8 @@ require 'slack'
 
 #ENV['SLACK_API_TOKEN'] = 'xoxp-2381348639-2381348641-2387116848-200f20'
 
+puts '~~~~~ SLACK_API_TOKEN: %s' % ENV['SLACK_API_TOKEN'];
+
 Slack.configure do |config|
   config.token = ENV['SLACK_API_TOKEN'];
 end
