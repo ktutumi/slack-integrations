@@ -17,16 +17,18 @@ end
 
 post '/bitbucket/post/:channel' do |channel|
   puts '~~~~~ POST /'
+  puts '~~~~~ params[payload]'
+  puts params['payload']
+  puts '~~~~~~~~~~~~~~~~~~~'
 
-  params = ::MultiJson.load(Rack::Utils.unescape(request.body.read))
-  body = params['payload']
+  body = ::MultiJson.load(params['payload'])
 
   repository = "#{body['repository']['owner']}/#{body['repository']['name']}"
 
   name = body['repository']['name']
   url = body['canon_url'] + body['repository']['absolute_url']
 
-  text = '<%s|%s> pushed to <%s|%s>  ' % [
+  text = "<%s|%s> pushed to <%s|%s>  \n" % [
       "#{body['canon_url']}/#{body['user']}",
       body['user'],
       url,
@@ -34,15 +36,14 @@ post '/bitbucket/post/:channel' do |channel|
   ]
 
 
-  template = '[%s/%s] <%s/commits/%s|%s>: %s'
-  text << "  \n"
+  template = '> <%s/commits/%s|%s>: %s'
+  text << ''
   text << body['commits'].map { |commit|
     node = commit['node']
     message = commit['message']
-    branch = commit['branch']
 
-    template % [name, branch, url, node, node, message]
-  }.join("  \n")
+    template % [url, node, node, message]
+  }.join('')
 
   Slack.chat_postMessage ({
     token: ENV['SLACK_API_TOKEN'],
