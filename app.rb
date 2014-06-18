@@ -6,6 +6,14 @@ Slack.configure do |config|
   config.token = ENV['SLACK_API_TOKEN'];
 end
 
+head '/' do
+  json ok: true;
+end
+
+get '/' do
+  json ok: true;
+end
+
 #
 # BitBucket の コミットを通知する
 #
@@ -46,7 +54,7 @@ end
 #
 # Trello の更新を通知する
 #
-get 'trello/post/:channel' do |channel|
+head 'trello/post/:channel' do |channel|
   json ok: true
 end
 
