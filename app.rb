@@ -8,14 +8,9 @@ Slack.configure do |config|
   config.token = ENV['SLACK_API_TOKEN'];
 end
 
-
-get '/' do
-  response = MultiJson::dump({foo: 'bar', hoge: 'fuga'})
-  puts response
-  response
-end
-
+#
 # BitBucket の コミットを通知する
+#
 post '/bitbucket/post/:channel' do |channel|
   body = ::MultiJson.load(params['payload'])
 
@@ -29,7 +24,6 @@ post '/bitbucket/post/:channel' do |channel|
       url,
       repository
   ]
-
 
   template = '> <%s/commits/%s|%s>: %s'
   text << ''
