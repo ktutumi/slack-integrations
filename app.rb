@@ -54,7 +54,7 @@ end
 #
 # Trello の更新を通知する
 #
-head 'trello/post/:channel' do |channel|
+head '/trello/post/:channel' do |channel|
   return 'ok'
 end
 
