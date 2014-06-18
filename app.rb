@@ -2,8 +2,6 @@ require 'sinatra'
 require 'multi_json'
 require 'slack'
 
-#ENV['SLACK_API_TOKEN'] = 'xoxp-2381348639-2381348641-2387116848-200f20'
-
 Slack.configure do |config|
   config.token = ENV['SLACK_API_TOKEN'];
 end
