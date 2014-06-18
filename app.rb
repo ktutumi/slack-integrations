@@ -43,4 +43,9 @@ post '/bitbucket/post/:channel' do |channel|
   return 'ok'
 end
 
-
+#
+# Trello の更新を通知する
+#
+post 'trello/post/:channel' do |channel|
+  json ok: true
+end
