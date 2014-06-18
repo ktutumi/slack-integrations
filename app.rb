@@ -7,11 +7,11 @@ Slack.configure do |config|
 end
 
 head '/' do
-  json ok: true;
+  return 'ok'
 end
 
 get '/' do
-  json ok: true;
+  return 'ok'
 end
 
 #
@@ -55,6 +55,6 @@ end
 # Trello の更新を通知する
 #
 head 'trello/post/:channel' do |channel|
-  json ok: true
+  return 'ok'
 end
 
