@@ -35,9 +35,13 @@ post '/bitbucket/post/:channel' do |channel|
   text << ''
   text << body['commits'].map { |commit|
     node = commit['node']
-    message = commit['message']
+    message = commit['message'].lines.first
+    puts '----------------'
+    puts commit['message']
+    puts message
+    puts '----------------'
 
-    template % [url, node, node, message]
+    template % [url.chop, node, node, message]
   }.join('')
 
   Slack.chat_postMessage ({
@@ -54,7 +58,30 @@ end
 #
 # Trello の更新を通知する
 #
-head '/trello/post/:channel' do |channel|
+#head '/trello/post/:channel' do |channel|
+#  return 'ok'
+#end
+
+post '/trello/post/:channel' do |channel|
+  puts '~~~~~~~~~~~~~~~~~~~~'
+  req = TrelloRequest.new(request)
+  puts req.board_name
+  puts '~~~~~~~~~~~~~~~~~~~~'
+
   return 'ok'
 end
 
+class TrelloRequest
+  def initialize(request)
+    request.body.rewind
+    @body = ::MultiJson.load(request.body.read)
+  end
+
+  def board_name
+    @body['action']['data']['board']['name'] rescue nil
+  end
+
+  def card_name
+    @body['action']['data']['card']['name'] rescue nil
+  end
+end
