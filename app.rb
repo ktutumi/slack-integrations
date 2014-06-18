@@ -46,6 +46,7 @@ end
 #
 # Trello の更新を通知する
 #
-post 'trello/post/:channel' do |channel|
+get 'trello/post/:channel' do |channel|
   json ok: true
 end
+
